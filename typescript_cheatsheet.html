@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeScript Cheatsheet</title>
+  <style>
+    :root {
+      /* Light Theme Colors */
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+      --heading-color: #007acc; /* h1 */
+      --section-bg: #fff;
+      --section-border: #007acc;
+      --section-heading-color: #005a9c; /* h2 */
+      --pre-bg: #eee;
+      --pre-text: #1a202c; /* Default code text */
+      --purpose-text: #444;
+      --back-button-bg: #e2e8f0;
+      --back-button-text: #2d3748;
+      --back-button-hover-bg: #cbd5e0;
+      --toggle-bg: #e5e7eb;
+      --toggle-icon: "☀️";
+    }
+
+    body.dark-mode {
+      /* Dark Theme Colors */
+      --bg-color: #1f2937;
+      --text-color: #e2e8f0;
+      --heading-color: #60a5fa; /* h1 */
+      --section-bg: #2d3748;
+      --section-border: #60a5fa;
+      --section-heading-color: #90cdf4; /* h2 */
+      --pre-bg: #1a202c; /* Darker code background */
+      --pre-text: #e2e8f0; /* Lighter code text */
+      --purpose-text: #a0aec0;
+      --back-button-bg: #4a5568;
+      --back-button-text: #f7fafc;
+      --back-button-hover-bg: #718096;
+      --toggle-bg: #4b5563;
+      --toggle-icon: "🌙";
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      background: var(--bg-color); /* Use variable */
+      color: var(--text-color); /* Use variable */
+      padding: 2rem;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative; /* Needed for toggle */
+      min-height: 100vh;
+    }
+    .cheatsheet {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: var(--heading-color); /* Use variable */
+      margin-bottom: 0.5rem;
+      transition: color 0.3s;
+    }
+    .section {
+      background: var(--section-bg); /* Use variable */
+      border-left: 6px solid var(--section-border); /* Use variable */
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: var(--section-heading-color); /* Use variable */
+      transition: color 0.3s;
+    }
+    pre {
+      background: var(--pre-bg); /* Use variable */
+      color: var(--pre-text); /* Use variable */
+      padding: 0.5rem;
+      overflow-x: auto;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    code { /* Applies to inline and block code */
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: var(--pre-text); /* Use variable for consistency */
+    }
+     p { /* Ensure paragraphs inherit body color */
+        color: var(--text-color);
+        transition: color 0.3s;
+    }
+    .purpose {
+      font-style: italic;
+      color: var(--purpose-text); /* Use variable */
+      transition: color 0.3s;
+    }
+    .back-button {
+      display: inline-block;
+      margin-bottom: 1.5rem; /* Space below the button */
+      padding: 0.5rem 1rem;
+      background-color: var(--back-button-bg); /* Use variable */
+      color: var(--back-button-text); /* Use variable */
+      text-decoration: none; /* Remove underline */
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effect */
+      font-size: 0.9rem;
+    }
+    .back-button:hover {
+      background-color: var(--back-button-hover-bg); /* Use variable */
+    }
+
+    /* Theme Toggle Button Styles */
+    #theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--toggle-bg);
+      color: var(--text-color); /* Use text color for icon */
+      border: 1px solid var(--section-border); /* Use a theme border */
+      border-radius: 50%; /* Make it circular */
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    #theme-toggle::before {
+      content: var(--toggle-icon); /* Display sun or moon */
+    }
+    #theme-toggle:hover {
+       background-color: var(--back-button-hover-bg); /* Reuse hover color */
+    }
+  </style>
+</head>
+<body>
+  <button id="theme-toggle" title="Toggle theme"></button> <!-- Theme toggle button -->
+  <div class="cheatsheet">
+    <h1>📘 TypeScript Cheatsheet (Beginner → Advanced)</h1>
+    <a href="javascript:history.back()" class="back-button">← Go Back</a>
+
+    <div class="section">
+      <h2>1. What is TypeScript?</h2>
+      <p>TypeScript is a superset of JavaScript that adds static typing.</p>
+      <p class="purpose">Purpose: Catch errors early and improve code maintainability.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Basic Types</h2>
+      <pre><code>let isDone: boolean = false;
+let age: number = 25;
+let username: string = "John";
+let scores: number[] = [90, 80];
+let data: any = "anything";</code></pre>
+      <p class="purpose">Purpose: Declare types explicitly to avoid errors.</p>
+    </div>
+
+    <div class="section">
+      <h2>3. Type Inference</h2>
+      <pre><code>let city = "New York"; // inferred as string</code></pre>
+      <p class="purpose">Purpose: Let TypeScript guess the type based on assignment.</p>
+    </div>
+
+    <div class="section">
+      <h2>4. Functions</h2>
+      <pre><code>function add(a: number, b: number): number {
+  return a + b;
+}</code></pre>
+      <p class="purpose">Purpose: Type input and return values for clarity.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Type Aliases</h2>
+      <pre><code>type ID = number | string;
+let userId: ID = "abc";</code></pre>
+      <p class="purpose">Purpose: Name a union or complex type for reuse.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Interfaces</h2>
+      <pre><code>interface User {
+  id: number;
+  name: string;
+}</code></pre>
+      <p class="purpose">Purpose: Define a contract for object shapes.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Union and Intersection Types</h2>
+      <pre><code>let value: string | number;
+type A = { a: number };
+type B = { b: string };
+type AB = A & B;</code></pre>
+      <p class="purpose">Purpose: Combine or separate possible types.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Enums</h2>
+      <pre><code>enum Direction { Up, Down, Left, Right }
+let dir = Direction.Up;</code></pre>
+      <p class="purpose">Purpose: Use readable names for constants.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Generics</h2>
+      <pre><code>function identity<T>(arg: T): T {
+  return arg;
+}</code></pre>
+      <p class="purpose">Purpose: Create reusable and type-safe functions/components.</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Type Narrowing</h2>
+      <pre><code>function printId(id: string | number) {
+  if (typeof id === "string") {
+    console.log(id.toUpperCase());
+  }
+}</code></pre>
+      <p class="purpose">Purpose: Safely use a value after checking its type.</p>
+    </div>
+
+    <div class="section">
+      <h2>11. Type Assertions</h2>
+      <pre><code>let someValue: any = "hello";
+let length = (someValue as string).length;</code></pre>
+      <p class="purpose">Purpose: Tell TS a more specific type when you know better.</p>
+    </div>
+
+    <div class="section">
+      <h2>12. Classes</h2>
+      <pre><code>class Person {
+  constructor(public name: string) {}
+  greet() {
+    console.log(`Hi, I'm ${this.name}`);
+  }
+}</code></pre>
+      <p class="purpose">Purpose: Write OOP-style code with reusable logic.</p>
+    </div>
+
+    <div class="section">
+      <h2>13. Access Modifiers</h2>
+      <pre><code>class Car {
+  private speed: number;
+  protected model: string;
+  public brand: string;
+}</code></pre>
+      <p class="purpose">Purpose: Control access to class members.</p>
+    </div>
+
+    <div class="section">
+      <h2>14. Abstract Classes</h2>
+      <pre><code>abstract class Shape {
+  abstract area(): number;
+}</code></pre>
+      <p class="purpose">Purpose: Enforce implementation of abstract methods in subclasses.</p>
+    </div>
+
+    <div class="section">
+      <h2>15. Utility Types</h2>
+      <pre><code>Partial<Type>
+Required<Type>
+Readonly<Type>
+Pick<Type, Keys>
+Omit<Type, Keys></code></pre>
+      <p class="purpose">Purpose: Modify existing types with built-in helpers.</p>
+    </div>
+
+    <div class="section">
+      <h2>16. Conditional Types</h2>
+      <pre><code>type IsString<T> = T extends string ? true : false;</code></pre>
+      <p class="purpose">Purpose: Create types that depend on conditions.</p>
+    </div>
+
+    <div class="section">
+      <h2>17. Modules</h2>
+      <pre><code>// math.ts
+export function add(x: number, y: number): number { return x + y; }
+// app.ts
+import { add } from './math';</code></pre>
+      <p class="purpose">Purpose: Organize code across multiple files.</p>
+    </div>
+
+    <div class="section">
+      <h2>18. Bonus Tips</h2>
+      <pre><code>type Keys = keyof User;
+type Book = Record<string, string>;
+let val: never = (() => { throw "error" })();</code></pre>
+      <p class="purpose">Purpose: Leverage TS power tools for advanced control.</p>
+    </div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    // const backButton = document.querySelector('.back-button'); // Get back button (optional)
+
+    // Function to apply the theme
+    const applyTheme = (theme) => {
+      const isDarkMode = theme === 'dark';
+      if (isDarkMode) {
+        body.classList.add('dark-mode');
+      } else {
+        body.classList.remove('dark-mode');
+      }
+      // Optional: Update back button link if it's not javascript:history.back()
+      /*
+      if (backButton && !backButton.href.startsWith('javascript:')) {
+          try {
+              const url = new URL(backButton.href, window.location.origin);
+              url.searchParams.set('theme', theme);
+              backButton.href = url.toString();
+          } catch (e) {
+              console.error("Error updating back button href:", backButton.href, e);
+          }
+      }
+      */
+    };
+
+    // Determine initial theme: URL param > localStorage > system pref > light
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTheme = urlParams.get('theme');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    let initialTheme = 'light'; // Default
+    if (urlTheme === 'dark' || urlTheme === 'light') {
+        initialTheme = urlTheme;
+    } else if (savedTheme === 'dark' || savedTheme === 'light') {
+        initialTheme = savedTheme;
+    } else if (prefersDark) {
+        initialTheme = 'dark';
+    }
+
+    // Apply the initial theme
+    applyTheme(initialTheme);
+    // Optionally, save the theme derived from URL/system to localStorage if not already set
+    if (!savedTheme && (urlTheme || prefersDark)) {
+        localStorage.setItem('theme', initialTheme);
+    }
+
+
+    // Event listener for the toggle button
+    themeToggle.addEventListener('click', () => {
+      const isCurrentlyDarkMode = body.classList.contains('dark-mode');
+      const newTheme = isCurrentlyDarkMode ? 'light' : 'dark';
+      applyTheme(newTheme); // Apply the new theme
+      localStorage.setItem('theme', newTheme); // Save preference
+    });
+
+     // Listen for changes in system preference
+     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        // Only change if no theme is explicitly saved by the user
+        if (!localStorage.getItem('theme')) {
+            const newColorScheme = event.matches ? "dark" : "light";
+            applyTheme(newColorScheme);
+        }
+    });
+  </script>
+
+</body>
+</html>

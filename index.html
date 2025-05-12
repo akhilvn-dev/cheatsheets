@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cheatsheets Index</title>
+  <style>
+    :root {
+      /* Light Theme Colors */
+      --bg-color: #f3f4f6;
+      --text-color: #111827;
+      --heading-color: #1d4ed8;
+      --link-bg: white;
+      --link-border: #e5e7eb;
+      --link-border-left: #2563eb;
+      --link-text: #1f2937;
+      --link-desc-text: #4b5563;
+      --link-hover-border: #1d4ed8;
+      --link-hover-bg: #eff6ff;
+      --toggle-bg: #e5e7eb;
+      --toggle-icon: "☀️"; /* Sun icon for light mode */
+    }
+
+    body.dark-mode {
+      /* Dark Theme Colors */
+      --bg-color: #1f2937;
+      --text-color: #f9fafb;
+      --heading-color: #60a5fa;
+      --link-bg: #374151;
+      --link-border: #4b5563;
+      --link-border-left: #60a5fa;
+      --link-text: #f9fafb;
+      --link-desc-text: #d1d5db;
+      --link-hover-border: #93c5fd;
+      --link-hover-bg: #4b5563;
+      --toggle-bg: #4b5563;
+      --toggle-icon: "🌙"; /* Moon icon for dark mode */
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: var(--bg-color); /* Use variable */
+      color: var(--text-color); /* Use variable */
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
+      position: relative; /* Needed for absolute positioning of the toggle */
+      min-height: 100vh; /* Ensure body takes full height */
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--heading-color); /* Use variable */
+    }
+    .cheatsheet-list {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+    }
+    .cheatsheet-item {
+      background-color: var(--link-bg); /* Use variable */
+      border: 2px solid var(--link-border); /* Use variable */
+      border-left: 6px solid var(--link-border-left); /* Use variable */
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: var(--link-text); /* Use variable */
+      transition: all 0.2s;
+    }
+    .cheatsheet-item:hover {
+      border-color: var(--link-hover-border); /* Use variable */
+      background-color: var(--link-hover-bg); /* Use variable */
+    }
+    .cheatsheet-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .cheatsheet-desc {
+      font-size: 0.95rem;
+      color: var(--link-desc-text); /* Use variable */
+    }
+
+    /* Theme Toggle Button Styles */
+    #theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--toggle-bg);
+      color: var(--text-color);
+      border: 1px solid var(--link-border);
+      border-radius: 50%; /* Make it circular */
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    #theme-toggle::before {
+      content: var(--toggle-icon); /* Display sun or moon */
+    }
+    #theme-toggle:hover {
+       background-color: var(--link-hover-bg);
+    }
+
+  </style>
+</head>
+<body>
+  <button id="theme-toggle" title="Toggle theme"></button> <!-- Theme toggle button -->
+  <h1>📚 Cheatsheets</h1>
+  <div class="cheatsheet-list">
+    <a class="cheatsheet-item" href="typescript_cheatsheet.html">
+      <div class="cheatsheet-title">TypeScript Cheatsheet</div>
+      <div class="cheatsheet-desc">Beginner to Advanced guide to TypeScript with examples.</div>
+    </a>
+    <a class="cheatsheet-item" href="python_cheatsheet.html">
+      <div class="cheatsheet-title">Python Cheatsheet</div>
+      <div class="cheatsheet-desc">Essential Python syntax and tips for beginners and beyond.</div>
+    </a>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const cheatsheetLinks = document.querySelectorAll('.cheatsheet-item'); // Get links
+
+    // Function to apply the theme AND update links
+    const applyTheme = (theme) => {
+      const isDarkMode = theme === 'dark';
+      if (isDarkMode) {
+        body.classList.add('dark-mode');
+      } else {
+        body.classList.remove('dark-mode');
+      }
+      // Update links
+      cheatsheetLinks.forEach(link => {
+        // Use try...catch in case of invalid initial href
+        try {
+            const url = new URL(link.href, window.location.origin); // Ensure base URL is correct
+            url.searchParams.set('theme', theme);
+            link.href = url.toString();
+        } catch (e) {
+            console.error("Error updating link href:", link.href, e);
+        }
+      });
+    };
+
+    // Check localStorage for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    // Determine initial theme: use saved theme, or system preference, or default to light
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+    // Apply the initial theme and update links *after* the function is defined
+    applyTheme(initialTheme);
+
+
+    // Event listener for the toggle button
+    themeToggle.addEventListener('click', () => {
+      // Check the class *before* toggling to determine the *current* state
+      const isCurrentlyDarkMode = body.classList.contains('dark-mode');
+      // The new theme will be the opposite
+      const newTheme = isCurrentlyDarkMode ? 'light' : 'dark';
+      applyTheme(newTheme); // Apply the new theme (this updates class and links)
+      localStorage.setItem('theme', newTheme); // Save preference
+    });
+
+     // Listen for changes in system preference
+     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        // Only change if no theme is explicitly saved by the user
+        if (!localStorage.getItem('theme')) {
+            const newColorScheme = event.matches ? "dark" : "light";
+            applyTheme(newColorScheme); // Apply theme and update links
+        }
+    });
+  </script>
+</body>
+</html>

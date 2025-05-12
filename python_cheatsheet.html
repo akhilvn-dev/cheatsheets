@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Cheatsheet</title>
+  <style>
+    :root {
+      /* Light Theme Colors */
+      --bg-color: #fefefe;
+      --text-color: #222;
+      --heading-color: #2b6cb0; /* h1 */
+      --section-bg: #ffffff;
+      --section-border: #3182ce;
+      --section-heading-color: #2c5282; /* h2 */
+      --pre-bg: #edf2f7;
+      --pre-text: #1a202c; /* Default code text */
+      --purpose-text: #555;
+      --back-button-bg: #e2e8f0;
+      --back-button-text: #2d3748;
+      --back-button-hover-bg: #cbd5e0;
+      --toggle-bg: #e5e7eb;
+      --toggle-icon: "☀️";
+      --ul-text: #333; /* List item text */
+      --ul-strong-text: #111; /* Bold text in lists */
+    }
+
+    body.dark-mode {
+      /* Dark Theme Colors */
+      --bg-color: #1a202c;
+      --text-color: #e2e8f0;
+      --heading-color: #63b3ed; /* h1 */
+      --section-bg: #2d3748;
+      --section-border: #63b3ed;
+      --section-heading-color: #90cdf4; /* h2 */
+      --pre-bg: #1a202c; /* Darker code background */
+      --pre-text: #e2e8f0; /* Lighter code text */
+      --purpose-text: #a0aec0;
+      --back-button-bg: #4a5568;
+      --back-button-text: #f7fafc;
+      --back-button-hover-bg: #718096;
+      --toggle-bg: #4b5563;
+      --toggle-icon: "🌙";
+      --ul-text: #cbd5e0; /* List item text */
+      --ul-strong-text: #f7fafc; /* Bold text in lists */
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg-color); /* Use variable */
+      color: var(--text-color); /* Use variable */
+      padding: 2rem;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative; /* Needed for toggle */
+      min-height: 100vh;
+    }
+    .cheatsheet {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: var(--heading-color); /* Use variable */
+      margin-bottom: 1rem;
+    }
+    .section {
+      background: var(--section-bg); /* Use variable */
+      border-left: 6px solid var(--section-border); /* Use variable */
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: var(--section-heading-color); /* Use variable */
+      transition: color 0.3s;
+    }
+    pre {
+      background: var(--pre-bg); /* Use variable */
+      color: var(--pre-text); /* Use variable */
+      padding: 0.75rem;
+      overflow-x: auto;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    code { /* Applies to inline and block code */
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: var(--pre-text); /* Use variable for consistency */
+    }
+    p { /* Ensure paragraphs inherit body color */
+        color: var(--text-color);
+        transition: color 0.3s;
+    }
+    .purpose {
+      font-style: italic;
+      color: var(--purpose-text); /* Use variable */
+      margin-top: 0.5rem;
+      transition: color 0.3s;
+    }
+    .back-button {
+      display: inline-block;
+      margin-bottom: 1.5rem; /* Space below the button */
+      padding: 0.5rem 1rem;
+      background-color: var(--back-button-bg); /* Use variable */
+      color: var(--back-button-text); /* Use variable */
+      text-decoration: none; /* Remove underline */
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effect */
+      font-size: 0.9rem;
+    }
+    .back-button:hover {
+      background-color: var(--back-button-hover-bg); /* Use variable */
+    }
+    ul {
+        color: var(--ul-text); /* Use variable */
+        padding-left: 20px; /* Indent list */
+        transition: color 0.3s;
+    }
+    ul li b {
+        color: var(--ul-strong-text); /* Use variable */
+        transition: color 0.3s;
+    }
+
+    /* Theme Toggle Button Styles */
+    #theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--toggle-bg);
+      color: var(--text-color); /* Use text color for icon */
+      border: 1px solid var(--section-border); /* Use a theme border */
+      border-radius: 50%; /* Make it circular */
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    #theme-toggle::before {
+      content: var(--toggle-icon); /* Display sun or moon */
+    }
+    #theme-toggle:hover {
+       background-color: var(--back-button-hover-bg); /* Reuse hover color */
+    }
+  </style>
+</head>
+<body>
+  <button id="theme-toggle" title="Toggle theme"></button> <!-- Theme toggle button -->
+  <div class="cheatsheet">
+    <h1>🐍 Python Cheatsheet (Beginner → Advanced)</h1>
+    <a href="javascript:history.back()" class="back-button">← Go Back</a>
+
+    <div class="section">
+      <h2>1. What is Python?</h2>
+      <p>Python is a high-level, interpreted programming language known for readability and versatility.</p>
+      <p class="purpose">Purpose: Write clear, logical code for projects big and small.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Basic Data Types</h2>
+      <pre><code>is_active = True
+age = 30
+pi = 3.1415
+name = "Alice"
+items = [1, 2, 3]
+info = {"key": "value"}
+data = None</code></pre>
+      <p class="purpose">Purpose: Store different types of data appropriately.</p>
+    </div>
+
+    <div class="section">
+      <h2>3. Variables and Type Inference</h2>
+      <pre><code>message = "Hello World"  # Python infers the type</code></pre>
+      <p class="purpose">Purpose: Write clean code without explicit type declarations.</p>
+    </div>
+
+    <div class="section">
+      <h2>4. Functions</h2>
+      <pre><code>def add(a, b):
+    return a + b</code></pre>
+      <p class="purpose">Purpose: Reuse logic without repeating code.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Control Flow</h2>
+      <pre><code>if age > 18:
+    print("Adult")
+elif age == 18:
+    print("Just became adult")
+else:
+    print("Minor")</code></pre>
+      <p class="purpose">Purpose: Make decisions based on conditions.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Loops</h2>
+      <pre><code>for item in items:
+    print(item)
+
+while age > 0:
+    age -= 1</code></pre>
+      <p class="purpose">Purpose: Repeat actions multiple times.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. List Comprehension</h2>
+      <pre><code>squares = [x**2 for x in range(5)]</code></pre>
+      <p class="purpose">Purpose: Create lists quickly and concisely.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Dictionaries</h2>
+      <pre><code>person = {"name": "Alice", "age": 30}
+print(person["name"])</code></pre>
+      <p class="purpose">Purpose: Store key-value pairs for quick lookup.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Classes and Objects</h2>
+      <pre><code>class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        print(f"Hello, {self.name}")
+
+p = Person("Alice")
+p.greet()</code></pre>
+      <p class="purpose">Purpose: Organize code using Object-Oriented Programming (OOP).</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Inheritance</h2>
+      <pre><code>class Student(Person):
+    def __init__(self, name, grade):
+        super().__init__(name)
+        self.grade = grade</code></pre>
+      <p class="purpose">Purpose: Reuse and extend functionality across classes.</p>
+    </div>
+
+    <div class="section">
+      <h2>11. Modules and Packages</h2>
+      <pre><code># math_module.py
+def add(a, b):
+    return a + b
+
+# app.py
+import math_module
+print(math_module.add(2, 3))</code></pre>
+      <p class="purpose">Purpose: Organize and reuse code across multiple files.</p>
+    </div>
+
+    <div class="section">
+      <h2>12. Exception Handling</h2>
+      <pre><code>try:
+    1 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+finally:
+    print("End of operation")</code></pre>
+      <p class="purpose">Purpose: Handle errors gracefully without crashing.</p>
+    </div>
+
+    <div class="section">
+      <h2>13. Decorators</h2>
+      <pre><code>def decorator(func):
+    def wrapper():
+        print("Before function")
+        func()
+        print("After function")
+    return wrapper
+
+@decorator
+def greet():
+    print("Hello")
+
+greet()</code></pre>
+      <p class="purpose">Purpose: Extend or modify function behavior.</p>
+    </div>
+
+    <div class="section">
+      <h2>14. Lambda Functions</h2>
+      <pre><code>add = lambda x, y: x + y
+print(add(2, 3))</code></pre>
+      <p class="purpose">Purpose: Create small anonymous functions inline.</p>
+    </div>
+
+    <div class="section">
+      <h2>15. Built-in Functions to Know</h2>
+      <pre><code>nums = [1, 2, 3]
+doubled = list(map(lambda x: x*2, nums))</code></pre>
+      <p class="purpose">Purpose: Perform common tasks easily.</p>
+    </div>
+
+    <div class="section">
+      <h2>16. Type Annotations</h2>
+      <pre><code>def greet(name: str) -> str:
+    return f"Hello, {name}"</code></pre>
+      <p class="purpose">Purpose: Improve code readability and tooling support.</p>
+    </div>
+
+    <div class="section">
+      <h2>17. Virtual Environments</h2>
+      <pre><code>python -m venv myenv
+source myenv/bin/activate  # Mac/Linux
+myenv\Scripts\activate    # Windows</code></pre>
+      <p class="purpose">Purpose: Isolate project dependencies.</p>
+    </div>
+
+    <div class="section">
+      <h2>18. Popular Libraries</h2>
+      <ul>
+        <li><b>requests</b> — HTTP requests</li>
+        <li><b>pandas</b> — Data analysis</li>
+        <li><b>numpy</b> — Numerical operations</li>
+        <li><b>matplotlib</b> — Plotting graphs</li>
+        <li><b>flask</b> — Web applications</li>
+      </ul>
+      <p class="purpose">Purpose: Extend Python capabilities quickly.</p>
+    </div>
+
+    <div class="section">
+      <h2>Bonus Tips</h2>
+      <ul>
+        <li><code>*args, **kwargs</code> — Flexible arguments</li>
+        <li><code>with</code> — Context management</li>
+        <li>List vs Tuple vs Set — Different collection behaviors</li>
+        <li>Generators — Yield data lazily</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const backButton = document.querySelector('.back-button'); // Get back button
+
+    // Function to apply the theme and update back button link
+    const applyTheme = (theme) => {
+      const isDarkMode = theme === 'dark';
+      if (isDarkMode) {
+        body.classList.add('dark-mode');
+      } else {
+        body.classList.remove('dark-mode');
+      }
+      // Update the back button's href if it's a real link (not javascript:)
+      // This assumes the previous page was index.html and respects its theme
+      // Note: history.back() doesn't allow parameter passing, so we can't directly
+      // set the theme for the *previous* page this way. We'll keep the JS back button
+      // but this logic is here if you change it to a direct link later.
+      /*
+      if (backButton && !backButton.href.startsWith('javascript:')) {
+          try {
+              const url = new URL(backButton.href, window.location.origin);
+              url.searchParams.set('theme', theme);
+              backButton.href = url.toString();
+          } catch (e) {
+              console.error("Error updating back button href:", backButton.href, e);
+          }
+      }
+      */
+    };
+
+    // Determine initial theme: URL param > localStorage > system pref > light
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTheme = urlParams.get('theme');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    let initialTheme = 'light'; // Default
+    if (urlTheme === 'dark' || urlTheme === 'light') {
+        initialTheme = urlTheme;
+    } else if (savedTheme === 'dark' || savedTheme === 'light') {
+        initialTheme = savedTheme;
+    } else if (prefersDark) {
+        initialTheme = 'dark';
+    }
+
+    // Apply the initial theme
+    applyTheme(initialTheme);
+    // Optionally, save the theme derived from URL/system to localStorage if not already set
+    if (!savedTheme && (urlTheme || prefersDark)) {
+        localStorage.setItem('theme', initialTheme);
+    }
+
+
+    // Event listener for the toggle button
+    themeToggle.addEventListener('click', () => {
+      const isCurrentlyDarkMode = body.classList.contains('dark-mode');
+      const newTheme = isCurrentlyDarkMode ? 'light' : 'dark';
+      applyTheme(newTheme); // Apply the new theme
+      localStorage.setItem('theme', newTheme); // Save preference
+    });
+
+     // Listen for changes in system preference
+     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        // Only change if no theme is explicitly saved by the user
+        if (!localStorage.getItem('theme')) {
+            const newColorScheme = event.matches ? "dark" : "light";
+            applyTheme(newColorScheme);
+        }
+    });
+  </script>
+
+</body>
+</html>
